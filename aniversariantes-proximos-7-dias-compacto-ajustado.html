@@ -341,10 +341,12 @@
     let cardWidth = 0;
 
     function getVisible(){
-      if(window.innerWidth < 640) return 1;
-      if(window.innerWidth < 980) return 2;
-      return 3;
-    }
+  const largura = document.querySelector('.widget').clientWidth;
+
+  if (largura < 520) return 1;
+  if (largura < 900) return 2;
+  return 3;
+}
 
     function formatDate(d){
       return d.toLocaleDateString('pt-BR', { day:'numeric', month:'long' });
