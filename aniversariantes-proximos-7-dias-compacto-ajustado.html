@@ -1,510 +1,287 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aniversariantes dos próximos 7 dias</title>
-  <style>
-    :root{
-      --azul:#242362;
-      --azul-claro:#eef2ff;
-      --borda:#d9deea;
-      --fundo:#f7f8fb;
-      --texto:#242362;
-      --texto-sec:#5e6785;
-      --radius:2px;
-      --gap:14px;
-      --card-width: 190px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    *{ box-sizing:border-box; }
+<style>
+:root{
+  --azul:#242362;
+  --azul-claro:#eef2ff;
+  --borda:#d9deea;
+  --fundo:#f7f8fb;
+  --texto:#242362;
+  --texto-sec:#5e6785;
+  --radius:2px;
+  --gap:14px;
+  --card-width: 190px;
+}
 
-    html, body{
-      margin:0;
-      padding:0;
-      background:transparent;
-      font-family:"Segoe UI", Arial, sans-serif;
-      overflow:hidden;
-    }
+*{ box-sizing:border-box; }
 
-    body{
-      padding:0;
-    }
+html, body{
+  margin:0;
+  padding:0;
+  background:transparent;
+  font-family:"Segoe UI", Arial, sans-serif;
+  overflow:hidden;
+}
 
-    .widget{
-      width:100%;
-      border-radius:var(--radius);
-      overflow:hidden;
-      background:#fff;
-      border:1px solid var(--borda);
-    }
+.widget{
+  width:100%;
+  border-radius:var(--radius);
+  overflow:hidden;
+  background:#fff;
+  border:1px solid var(--borda);
+}
 
-    .header{
-      background:var(--azul);
-      color:#fff;
-      padding:16px 18px 14px;
-    }
+/* HEADER */
+.header{
+  background:var(--azul);
+  color:#fff;
+  padding:16px 18px;
+}
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-size:11px;
-      font-weight:600;
-      background:rgba(255,255,255,.14);
-      border:1px solid rgba(255,255,255,.18);
-      padding:5px 10px;
-      border-radius:999px;
-      margin-bottom:8px;
-      line-height:1;
-    }
+.badge{
+  display:inline-block;
+  background:rgba(255,255,255,.2);
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:11px;
+  margin-bottom:6px;
+}
 
-    .header h2{
-      margin:0;
-      font-size:18px;
-      line-height:1.2;
-      font-weight:700;
-      color:#fff;
-    }
+.header h2{
+  margin:0;
+  font-size:18px;
+  font-weight:700;
+}
 
-    .subbar{
-      background:var(--fundo);
-      border-bottom:1px solid var(--borda);
-      padding:12px 18px;
-    }
+/* SUBBAR */
+.subbar{
+  background:var(--fundo);
+  padding:12px 18px;
+  border-bottom:1px solid var(--borda);
+}
 
-    .periodo{
-      color:var(--texto);
-      font-size:13px;
-      line-height:1.35;
-      margin-bottom:10px;
-    }
+.periodo{
+  font-size:13px;
+  margin-bottom:8px;
+}
 
-    .periodo strong{
-      font-weight:700;
-    }
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    .controls{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
+.chips span{
+  background:#eef1f7;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:12px;
+  margin-right:6px;
+}
 
-    .chips{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
+/* CARDS */
+.cards-area{
+  padding:14px 18px;
+}
 
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:7px;
-      background:#eef1f7;
-      color:var(--azul);
-      border:1px solid #d7ddec;
-      padding:6px 12px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:600;
-      line-height:1;
-    }
+.viewport{
+  overflow:hidden;
+}
 
-    .chip-dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--azul);
-      display:inline-block;
-    }
+.track{
+  display:flex;
+  gap:var(--gap);
+  transition:transform .4s ease;
+}
 
-    .chip-dot.today{
-      background:#d4a017;
-    }
+.card{
+  min-width:var(--card-width);
+  border:1px solid var(--borda);
+  border-radius:var(--radius);
+  padding:14px;
+  background:#fff;
+}
 
-    .nav{
-      display:flex;
-      gap:8px;
-      flex-shrink:0;
-    }
+.initials{
+  width:42px;
+  height:42px;
+  background:var(--azul);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  border-radius:8px;
+  margin-bottom:10px;
+}
 
-    .nav button{
-      width:32px;
-      height:32px;
-      border-radius:10px;
-      border:1px solid #d8deeb;
-      background:#fff;
-      color:var(--azul);
-      font-size:18px;
-      font-weight:700;
-      cursor:pointer;
-      line-height:1;
-    }
+.tag{
+  font-size:11px;
+  background:var(--azul-claro);
+  color:var(--azul);
+  padding:4px 8px;
+  border-radius:10px;
+  display:inline-block;
+  margin-bottom:6px;
+}
 
-    .nav button:disabled{
-      opacity:.45;
-      cursor:default;
-    }
+.name{
+  font-size:13px;
+  font-weight:700;
+  color:var(--texto);
+  margin-bottom:6px;
+}
 
-    .cards-area{
-      padding:14px 18px 16px;
-      background:#fff;
-    }
+.date{
+  font-size:16px;
+  font-weight:700;
+  color:var(--azul);
+}
 
-    .viewport{
-      overflow:hidden;
-      width:100%;
-    }
+.empty{
+  font-size:13px;
+  color:#666;
+}
 
-    .track{
-      display:flex;
-      gap:var(--gap);
-      transition:transform .45s ease;
-      will-change:transform;
-    }
-
-    .card{
-      flex:0 0 var(--card-width);
-      min-height:180px;
-      background:#fff;
-      border:1px solid var(--borda);
-      border-radius:var(--radius);
-      padding:14px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .card::after{
-      content:"";
-      position:absolute;
-      top:-10px;
-      right:-10px;
-      width:54px;
-      height:54px;
-      border-radius:50%;
-      background:#f1f3f8;
-    }
-
-    .initials{
-      position:relative;
-      z-index:1;
-      width:46px;
-      height:46px;
-      border-radius:12px;
-      background:var(--azul);
-      color:#fff;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:16px;
-      font-weight:700;
-      margin-bottom:12px;
-    }
-
-    .days-tag{
-      position:relative;
-      z-index:1;
-      display:inline-block;
-      background:var(--azul-claro);
-      color:var(--azul);
-      border-radius:999px;
-      padding:5px 10px;
-      font-size:11px;
-      font-weight:700;
-      line-height:1;
-      margin-bottom:10px;
-      text-transform:uppercase;
-    }
-
-    .name{
-      position:relative;
-      z-index:1;
-      color:var(--texto);
-      font-size:13px;
-      font-weight:700;
-      line-height:1.25;
-      text-transform:uppercase;
-      margin-bottom:10px;
-      min-height:48px;
-    }
-
-    .label{
-      position:relative;
-      z-index:1;
-      color:var(--texto-sec);
-      font-size:12px;
-      margin-bottom:2px;
-    }
-
-    .date{
-      position:relative;
-      z-index:1;
-      color:var(--azul);
-      font-size:16px;
-      font-weight:700;
-      line-height:1.1;
-    }
-
-    .empty{
-      padding:22px 18px;
-      color:var(--texto-sec);
-      font-size:13px;
-    }
-
-    @media (max-width: 900px){
-      :root{ --card-width: 180px; }
-      .header h2{ font-size:17px; }
-    }
-
-    @media (max-width: 640px){
-      .controls{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .nav{
-        align-self:flex-end;
-      }
-      :root{ --card-width: 170px; }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="widget">
-    <div class="header">
-      <div class="badge">🎉 É festa!</div>
-      <h2>Aniversariantes dos próximos 7 dias</h2>
-    </div>
 
-    <div class="subbar">
-      <div class="periodo" id="periodo"></div>
+<div class="widget">
 
-      <div class="controls">
-        <div class="chips">
-          <div class="chip"><span class="chip-dot"></span>Próximos dias</div>
-          <div class="chip"><span class="chip-dot today"></span>Hoje</div>
-        </div>
+  <div class="header">
+    <div class="badge">🎉 É festa!</div>
+    <h2>Aniversariantes dos próximos 7 dias</h2>
+  </div>
 
-        <div class="nav">
-          <button id="prevBtn" aria-label="Anterior">‹</button>
-          <button id="nextBtn" aria-label="Próximo">›</button>
-        </div>
+  <div class="subbar">
+    <div class="periodo" id="periodo"></div>
+
+    <div class="controls">
+      <div class="chips">
+        <span>Próximos dias</span>
+        <span>Hoje</span>
       </div>
-    </div>
-
-    <div class="cards-area" id="cardsArea">
-      <div class="viewport">
-        <div class="track" id="track"></div>
+      <div>
+        <button onclick="prev()">‹</button>
+        <button onclick="next()">›</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const JSON_FILE = 'aniversariantes-proximos-7-dias.json';
+  <div class="cards-area">
+    <div class="viewport">
+      <div class="track" id="track"></div>
+    </div>
+  </div>
 
-    const track = document.getElementById('track');
-    const periodoEl = document.getElementById('periodo');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const cardsArea = document.getElementById('cardsArea');
+</div>
 
-    let aniversariantes = [];
-    let currentIndex = 0;
-    let visibleCards = 3;
-    const cardWidth = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--card-width'));
-    const gapWidth = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'));
+<script>
+const track = document.getElementById('track');
+const periodoEl = document.getElementById('periodo');
 
-    function normalizarData(valor) {
-      if (!valor) return null;
+let dataFiltrada = [];
+let index = 0;
+let visible = 3;
 
-      if (typeof valor === 'string') {
-        const str = valor.trim();
+function getVisible(){
+  if(window.innerWidth < 600) return 1;
+  if(window.innerWidth < 900) return 2;
+  return 3;
+}
 
-        if (/^\\d{4}-\\d{2}-\\d{2}/.test(str)) {
-          const [ano, mes, dia] = str.split('T')[0].split('-').map(Number);
-          return { dia, mes, ano };
-        }
+function formatDate(d){
+  return d.toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
+}
 
-        if (/^\\d{2}\\/\\d{2}\\/\\d{4}$/.test(str)) {
-          const [dia, mes, ano] = str.split('/').map(Number);
-          return { dia, mes, ano };
-        }
+function initials(nome){
+  const p = nome.split(' ');
+  return (p[0][0] + (p[1]?.[0]||'')).toUpperCase();
+}
 
-        if (/^\\d{2}\\/\\d{2}$/.test(str)) {
-          const [dia, mes] = str.split('/').map(Number);
-          return { dia, mes, ano: null };
-        }
-      }
+function processar(data){
 
-      return null;
-    }
+  const hoje = new Date();
+  hoje.setHours(0,0,0,0);
 
-    function initials(nome) {
-      if (!nome) return '--';
-      const partes = nome.trim().split(/\\s+/).filter(Boolean);
-      const a = partes[0]?.[0] || '';
-      const b = partes[1]?.[0] || '';
-      return (a + b).toUpperCase();
-    }
+  const fim = new Date(hoje);
+  fim.setDate(hoje.getDate()+6);
 
-    function formatDateBR(date) {
-      return date.toLocaleDateString('pt-BR', {
-        day: 'numeric',
-        month: 'long'
-      });
-    }
+  periodoEl.innerHTML = `
+    <strong>Período:</strong> ${formatDate(hoje)} a ${formatDate(fim)}
+  `;
 
-    function formatShortDate(dia, mes) {
-      return String(dia).padStart(2, '0') + '/' + String(mes).padStart(2, '0');
-    }
+  dataFiltrada = data.map(p => {
+    const [ano,mes,dia] = p.DATANASCIMENTO.split('-').map(Number);
+    const dataAtual = new Date(hoje.getFullYear(), mes-1, dia);
 
-    function diffInDays(a, b) {
-      const ms = 24 * 60 * 60 * 1000;
-      const utcA = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-      const utcB = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-      return Math.round((utcB - utcA) / ms);
-    }
+    const diff = Math.round((dataAtual-hoje)/(1000*60*60*24));
 
-    function getVisibleCards() {
-      const w = window.innerWidth;
-      if (w <= 600) return 1;
-      if (w <= 900) return 2;
-      return 3;
-    }
-
-    function montarPeriodoTexto(hoje, fim) {
-      periodoEl.innerHTML = `
-        <strong>Período:</strong> ${formatDateBR(hoje)} a ${formatDateBR(fim)}<br>
-        Hoje + próximos 6 dias
-      `;
-    }
-
-    function processarDados(data) {
-      const hoje = new Date();
-      hoje.setHours(0,0,0,0);
-
-      const fim = new Date(hoje);
-      fim.setDate(hoje.getDate() + 6);
-
-      montarPeriodoTexto(hoje, fim);
-
-      const lista = data
-        .map(item => {
-          const nome = item.NOME || item.nome || item.Name || item.name;
-          const dataNascBruta =
-            item.DATANASCIMENTO ||
-            item.dataNascimento ||
-            item.data_nascimento ||
-            item.nascimento ||
-            item.date;
-
-          const parsed = normalizarData(dataNascBruta);
-          if (!nome || !parsed) return null;
-
-          const aniversarioEsteAno = new Date(hoje.getFullYear(), parsed.mes - 1, parsed.dia);
-          aniversarioEsteAno.setHours(0,0,0,0);
-
-          const diferenca = diffInDays(hoje, aniversarioEsteAno);
-
-          if (diferenca < 0 || diferenca > 6) return null;
-
-          let tag = '';
-          if (diferenca === 0) tag = 'HOJE';
-          else if (diferenca === 1) tag = 'AMANHÃ';
-          else tag = `EM ${diferenca} DIAS`;
-
-          return {
-            nome,
-            dia: parsed.dia,
-            mes: parsed.mes,
-            data: aniversarioEsteAno,
-            diferenca,
-            tag,
-            iniciais: initials(nome)
-          };
-        })
-        .filter(Boolean)
-        .sort((a, b) => a.diferenca - b.diferenca || a.nome.localeCompare(b.nome, 'pt-BR'));
-
-      aniversariantes = lista;
-      currentIndex = 0;
-      visibleCards = getVisibleCards();
-      render();
-    }
-
-    function render() {
-      if (!aniversariantes.length) {
-        cardsArea.innerHTML = '<div class="empty">Não há aniversariantes nos próximos 7 dias.</div>';
-        return;
-      }
-
-      if (!document.getElementById('track')) {
-        cardsArea.innerHTML = '<div class="viewport"><div class="track" id="track"></div></div>';
-      }
-
-      const trackEl = document.getElementById('track');
-
-      trackEl.innerHTML = aniversariantes.map(item => `
-        <div class="card">
-          <div class="initials">${item.iniciais}</div>
-          <div class="days-tag">${item.tag}</div>
-          <div class="name">${item.nome}</div>
-          <div class="label">Data</div>
-          <div class="date">${formatShortDate(item.dia, item.mes)}</div>
-        </div>
-      `).join('');
-
-      updateNav();
-      updateTransform();
-    }
-
-    function updateTransform() {
-      const total = aniversariantes.length;
-      const maxIndex = Math.max(0, total - visibleCards);
-      if (currentIndex > maxIndex) currentIndex = maxIndex;
-
-      const offset = currentIndex * (cardWidth() + gapWidth());
-      const trackEl = document.getElementById('track');
-      if (trackEl) {
-        trackEl.style.transform = `translateX(-${offset}px)`;
+    if(diff >=0 && diff <=6){
+      return {
+        nome:p.NOME,
+        dia,
+        mes,
+        diff,
+        tag: diff===0?'HOJE': diff===1?'AMANHÃ':`EM ${diff} DIAS`
       }
     }
+  }).filter(Boolean).sort((a,b)=>a.diff-b.diff);
 
-    function updateNav() {
-      const total = aniversariantes.length;
-      const maxIndex = Math.max(0, total - visibleCards);
-      prevBtn.disabled = currentIndex <= 0;
-      nextBtn.disabled = currentIndex >= maxIndex;
-    }
+  render();
+}
 
-    prevBtn.addEventListener('click', () => {
-      currentIndex = Math.max(0, currentIndex - 1);
-      updateTransform();
-      updateNav();
-    });
+function render(){
 
-    nextBtn.addEventListener('click', () => {
-      const maxIndex = Math.max(0, aniversariantes.length - visibleCards);
-      currentIndex = Math.min(maxIndex, currentIndex + 1);
-      updateTransform();
-      updateNav();
-    });
+  if(!dataFiltrada.length){
+    track.innerHTML = '<div class="empty">Nenhum aniversariante nos próximos dias.</div>';
+    return;
+  }
 
-    window.addEventListener('resize', () => {
-      visibleCards = getVisibleCards();
-      updateTransform();
-      updateNav();
-    });
+  track.innerHTML = dataFiltrada.map(p => `
+    <div class="card">
+      <div class="initials">${initials(p.nome)}</div>
+      <div class="tag">${p.tag}</div>
+      <div class="name">${p.nome}</div>
+      <div class="date">${String(p.dia).padStart(2,'0')}/${String(p.mes).padStart(2,'0')}</div>
+    </div>
+  `).join('');
 
-    fetch(JSON_FILE)
-      .then(res => {
-        if (!res.ok) throw new Error('Não foi possível carregar o JSON.');
-        return res.json();
-      })
-      .then(data => processarDados(data))
-      .catch(() => {
-        cardsArea.innerHTML = '<div class="empty">Erro ao carregar os aniversariantes. Verifique se o JSON está na mesma pasta do HTML.</div>';
-      });
-  </script>
+  update();
+}
+
+function update(){
+  visible = getVisible();
+  const offset = index * (190 + 14);
+  track.style.transform = `translateX(-${offset}px)`;
+}
+
+function next(){
+  index = Math.min(index+1, dataFiltrada.length-visible);
+  update();
+}
+
+function prev(){
+  index = Math.max(index-1,0);
+  update();
+}
+
+window.addEventListener('resize',update);
+
+fetch('aniversariantes-proximos-7-dias.json')
+  .then(r=>r.json())
+  .then(processar)
+  .catch(()=>{
+    track.innerHTML = '<div class="empty">Erro ao carregar JSON</div>';
+  });
+
+</script>
+
 </body>
 </html>
