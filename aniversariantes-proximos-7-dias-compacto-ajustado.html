@@ -1,493 +1,303 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aniversariantes dos próximos 7 dias</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root{
-      --azul:#242362;
-      --azul-claro:#eef2ff;
-      --azul-chip:#3d5fa8;
-      --dourado:#d7a526;
-      --borda:#d8dfeb;
-      --fundo:#f6f8fb;
-      --texto:#242362;
-      --texto-sec:#6b7288;
-      --radius:2px;
-      --gap:14px;
-      --shadow-soft:0 8px 18px rgba(36,35,98,.08);
-    }
+<style>
+:root{
+  --azul:#242362;
+  --azul-claro:#eef2ff;
+  --azul-chip:#3d5fa8;
+  --dourado:#d7a526;
+  --borda:#d8dfeb;
+  --fundo:#f6f8fb;
+  --texto:#242362;
+  --texto-sec:#6b7288;
+  --radius:2px;
+  --gap:14px;
+}
 
-    *{ box-sizing:border-box; }
+*{ box-sizing:border-box; }
 
-    html, body{
-      margin:0;
-      padding:0;
-      background:transparent;
-      font-family:"Segoe UI", Arial, sans-serif;
-      overflow:hidden;
-    }
+html, body{
+  margin:0;
+  padding:0;
+  background:transparent;
+  font-family:"Segoe UI", Arial, sans-serif;
+  overflow:hidden;
+}
 
-    .widget{
-      width:100%;
-      background:#fff;
-      border:1px solid var(--borda);
-      border-radius:var(--radius);
-      overflow:hidden;
-    }
+.widget{
+  width:100%;
+  background:#fff;
+  border:1px solid var(--borda);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
 
-    .header{
-      background:var(--azul);
-      color:#fff;
-      padding:16px 18px;
-    }
+/* HEADER */
+.header{
+  background:var(--azul);
+  color:#fff;
+  padding:16px 18px;
+}
 
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      background:rgba(255,255,255,.16);
-      border:1px solid rgba(255,255,255,.18);
-      padding:5px 11px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:600;
-      margin-bottom:8px;
-      line-height:1;
-    }
+.badge{
+  display:inline-flex;
+  gap:6px;
+  background:rgba(255,255,255,.16);
+  padding:5px 11px;
+  border-radius:999px;
+  font-size:11px;
+  margin-bottom:8px;
+}
 
-    .header h2{
-      margin:0;
-      font-size:18px;
-      font-weight:700;
-      line-height:1.2;
-      color:#fff;
-    }
+.header h2{
+  margin:0;
+  font-size:18px;
+  font-weight:700;
+}
 
-    .subbar{
-      background:var(--fundo);
-      padding:12px 18px 10px;
-      border-bottom:1px solid var(--borda);
-    }
+/* SUBBAR */
+.subbar{
+  background:var(--fundo);
+  padding:12px 18px;
+  border-bottom:1px solid var(--borda);
+}
 
-    .periodo{
-      font-size:13px;
-      color:var(--texto);
-      margin-bottom:10px;
-      line-height:1.35;
-    }
+.periodo{
+  font-size:13px;
+  margin-bottom:10px;
+}
 
-    .periodo strong{
-      font-weight:700;
-    }
+.controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    .controls{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-    }
+.chips{
+  display:flex;
+  gap:10px;
+}
 
-    .chips{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+.chip{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:#eef1f7;
+  font-size:12px;
+}
 
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:6px 12px;
-      border-radius:999px;
-      background:#eef1f7;
-      border:1px solid #dde4f0;
-      color:var(--azul);
-      font-size:12px;
-      font-weight:500;
-      line-height:1;
-    }
+.chip-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
 
-    .chip-dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      display:inline-block;
-      flex:0 0 8px;
-    }
+.proximos{ background:var(--azul-chip); }
+.hoje{ background:var(--dourado); }
 
-    .chip-dot.proximos{
-      background:var(--azul-chip);
-    }
+/* NAV */
+.nav button{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  border:1px solid #d9e0ec;
+  background:#fff;
+  cursor:pointer;
+  font-weight:700;
+}
 
-    .chip-dot.hoje{
-      background:var(--dourado);
-    }
+/* CARDS */
+.cards-wrap{
+  padding:14px 18px;
+}
 
-    .nav{
-      display:flex;
-      gap:8px;
-      flex-shrink:0;
-    }
+.viewport{
+  overflow:hidden;
+}
 
-    .nav button{
-      width:30px;
-      height:30px;
-      border-radius:10px;
-      border:1px solid #d9e0ec;
-      background:linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
-      color:var(--azul);
-      font-size:16px;
-      font-weight:700;
-      line-height:1;
-      cursor:pointer;
-      box-shadow:0 4px 10px rgba(36,35,98,.08);
-      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
-    }
+.track{
+  display:flex;
+  gap:var(--gap);
+  transition:transform .5s ease;
+}
 
-    .nav button:hover{
-      transform:translateY(-1px);
-      box-shadow:0 6px 14px rgba(36,35,98,.12);
-      background:linear-gradient(180deg, #ffffff 0%, #eef2f9 100%);
-    }
+.card{
+  border:1px solid var(--borda);
+  border-radius:var(--radius);
+  padding:16px;
+  min-height:150px;
+  background:#fff;
+  flex-shrink:0;
+}
 
-    .nav button:disabled{
-      opacity:.45;
-      cursor:default;
-      transform:none;
-      box-shadow:none;
-    }
+.days-tag{
+  background:var(--azul-claro);
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  margin-bottom:12px;
+  display:inline-block;
+}
 
-    .cards-wrap{
-      padding:14px 18px 14px 18px;
-      background:#fff;
-    }
+.name{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:12px;
+}
 
-    .viewport{
-      overflow:hidden;
-      width:100%;
-    }
+.date{
+  font-size:16px;
+  font-weight:700;
+  color:var(--azul);
+}
 
-    .track{
-      display:flex;
-      gap:var(--gap);
-      transition:transform .5s cubic-bezier(.22,.61,.36,1);
-      will-change:transform;
-    }
-
-    .card{
-      flex:0 0 auto;
-      min-height:156px;
-      background:#fff;
-      border:1px solid var(--borda);
-      border-radius:var(--radius);
-      padding:16px 14px 14px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .card::after{
-      content:"";
-      position:absolute;
-      top:-16px;
-      right:-18px;
-      width:60px;
-      height:60px;
-      border-radius:50%;
-      background:#f1f4f9;
-      z-index:0;
-    }
-
-    .days-tag{
-      position:relative;
-      z-index:1;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      min-height:28px;
-      padding:0 10px;
-      border-radius:999px;
-      background:var(--azul-claro);
-      color:var(--azul);
-      font-size:11px;
-      font-weight:800;
-      letter-spacing:.02em;
-      line-height:1;
-      margin-bottom:12px;
-      text-transform:uppercase;
-    }
-
-    .days-tag.today{
-      background:#fff6dc;
-      color:#8a6710;
-    }
-
-    .days-tag.tomorrow{
-      background:#eef2ff;
-      color:var(--azul);
-    }
-
-    .tag-dot{
-      width:7px;
-      height:7px;
-      border-radius:50%;
-      display:inline-block;
-      flex:0 0 7px;
-      background:var(--azul-chip);
-    }
-
-    .days-tag.today .tag-dot{
-      background:var(--dourado);
-    }
-
-    .name{
-      position:relative;
-      z-index:1;
-      color:var(--texto);
-      font-size:13px;
-      font-weight:600;
-      line-height:1.26;
-      text-transform:uppercase;
-      margin-bottom:12px;
-      min-height:48px;
-    }
-
-    .label{
-      position:relative;
-      z-index:1;
-      color:var(--texto-sec);
-      font-size:12px;
-      font-weight:500;
-      margin-bottom:2px;
-      line-height:1.1;
-    }
-
-    .date{
-      position:relative;
-      z-index:1;
-      color:var(--azul);
-      font-size:16px;
-      font-weight:700;
-      line-height:1.1;
-    }
-
-    .empty{
-      font-size:13px;
-      color:var(--texto-sec);
-      padding:4px 0;
-    }
-
-    @media (max-width: 900px){
-      .header h2{ font-size:17px; }
-      .controls{
-        gap:10px;
-      }
-    }
-
-    @media (max-width: 640px){
-      .controls{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      .nav{
-        align-self:flex-end;
-      }
-    }
-  </style>
+</style>
 </head>
+
 <body>
-  <div class="widget">
-    <div class="header">
-      <div class="badge">🎉 É festa!</div>
-      <h2>Aniversariantes dos próximos 7 dias</h2>
-    </div>
 
-    <div class="subbar">
-      <div class="periodo" id="periodo"></div>
+<div class="widget">
 
-      <div class="controls">
-        <div class="chips">
-          <div class="chip"><span class="chip-dot proximos"></span>Próximos dias</div>
-          <div class="chip"><span class="chip-dot hoje"></span>Hoje</div>
-        </div>
+  <div class="header">
+    <div class="badge">🎉 É festa!</div>
+    <h2>Aniversariantes dos próximos 7 dias</h2>
+  </div>
 
-        <div class="nav">
-          <button id="prevBtn" aria-label="Anterior">‹</button>
-          <button id="nextBtn" aria-label="Próximo">›</button>
-        </div>
+  <div class="subbar">
+    <div class="periodo" id="periodo"></div>
+
+    <div class="controls">
+      <div class="chips">
+        <div class="chip"><span class="chip-dot proximos"></span>Próximos dias</div>
+        <div class="chip"><span class="chip-dot hoje"></span>Hoje</div>
       </div>
-    </div>
 
-    <div class="cards-wrap" id="cardsWrap">
-      <div class="viewport">
-        <div class="track" id="track"></div>
+      <div class="nav">
+        <button onclick="prev()">‹</button>
+        <button onclick="next()">›</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const track = document.getElementById('track');
-    const periodoEl = document.getElementById('periodo');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const cardsWrap = document.getElementById('cardsWrap');
+  <div class="cards-wrap">
+    <div class="viewport">
+      <div class="track" id="track"></div>
+    </div>
+  </div>
 
-    let dataFiltrada = [];
-    let index = 0;
-    let visible = 3;
-    let cardWidth = 0;
+</div>
 
-    function getVisible(){
+<script>
+const track = document.getElementById('track');
+const periodoEl = document.getElementById('periodo');
+
+let dataFiltrada = [];
+let index = 0;
+let visible = 3;
+let cardWidth = 0;
+
+/* 🔥 AQUI ESTÁ O AJUSTE PRINCIPAL */
+function getVisible(){
   const largura = document.querySelector('.widget').clientWidth;
 
-  if (largura < 520) return 1;
+  if (largura < 500) return 1;
   if (largura < 900) return 2;
   return 3;
 }
 
-    function formatDate(d){
-      return d.toLocaleDateString('pt-BR', { day:'numeric', month:'long' });
-    }
+function formatDate(d){
+  return d.toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
+}
 
-    function shortDate(dia, mes){
-      return String(dia).padStart(2,'0') + '/' + String(mes).padStart(2,'0');
-    }
+function processar(data){
 
-    function processar(data){
-      const hoje = new Date();
-      hoje.setHours(0,0,0,0);
+  const hoje = new Date();
+  hoje.setHours(0,0,0,0);
 
-      const fim = new Date(hoje);
-      fim.setDate(hoje.getDate() + 6);
+  const fim = new Date(hoje);
+  fim.setDate(hoje.getDate()+6);
 
-      periodoEl.innerHTML = `<strong>Período:</strong> ${formatDate(hoje)} a ${formatDate(fim)}`;
+  periodoEl.innerHTML = `<strong>Período:</strong> ${formatDate(hoje)} a ${formatDate(fim)}`;
 
-      dataFiltrada = data.map(p => {
-        if (!p.DATANASCIMENTO || !p.NOME) return null;
+  dataFiltrada = data.map(p => {
+    const [ano,mes,dia] = p.DATANASCIMENTO.split('-').map(Number);
+    const dataAtual = new Date(hoje.getFullYear(), mes-1, dia);
 
-        const [ano, mes, dia] = p.DATANASCIMENTO.split('-').map(Number);
-        const aniversario = new Date(hoje.getFullYear(), mes - 1, dia);
-        aniversario.setHours(0,0,0,0);
+    const diff = Math.round((dataAtual-hoje)/(1000*60*60*24));
 
-        const diff = Math.round((aniversario - hoje) / (1000 * 60 * 60 * 24));
-
-        if (diff >= 0 && diff <= 6) {
-          let tag = '';
-          let tagClass = '';
-
-          if (diff === 0) {
-            tag = 'HOJE';
-            tagClass = 'today';
-          } else if (diff === 1) {
-            tag = 'AMANHÃ';
-            tagClass = 'tomorrow';
-          } else {
-            tag = `EM ${diff} DIAS`;
-            tagClass = '';
-          }
-
-          return {
-            nome: p.NOME,
-            dia,
-            mes,
-            diff,
-            tag,
-            tagClass
-          };
-        }
-
-        return null;
-      })
-      .filter(Boolean)
-      .sort((a,b) => a.diff - b.diff || a.nome.localeCompare(b.nome, 'pt-BR'));
-
-      index = 0;
-      render();
-    }
-
-    function render(){
-      if(!dataFiltrada.length){
-        track.innerHTML = '<div class="empty">Nenhum aniversariante nos próximos dias.</div>';
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
-        return;
+    if(diff >=0 && diff <=6){
+      return {
+        nome:p.NOME,
+        dia,
+        mes,
+        diff,
+        tag: diff===0?'HOJE': diff===1?'AMANHÃ':`EM ${diff} DIAS`
       }
-
-      track.innerHTML = dataFiltrada.map(p => `
-        <div class="card">
-          <div class="days-tag ${p.tagClass}">
-            <span class="tag-dot"></span>${p.tag}
-          </div>
-          <div class="name">${p.nome}</div>
-          <div class="label">Data</div>
-          <div class="date">${shortDate(p.dia, p.mes)}</div>
-        </div>
-      `).join('');
-
-      visible = getVisible();
-      applyCardWidths();
-      update();
     }
+  }).filter(Boolean).sort((a,b)=>a.diff-b.diff);
 
-    function applyCardWidths(){
-      const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'));
-      const viewport = cardsWrap.querySelector('.viewport');
-      const totalWidth = viewport.clientWidth;
-      cardWidth = (totalWidth - (gap * (visible - 1))) / visible;
+  render();
+}
 
-      track.querySelectorAll('.card').forEach(card => {
-        card.style.width = `${cardWidth}px`;
-        card.style.minWidth = `${cardWidth}px`;
-        card.style.maxWidth = `${cardWidth}px`;
-      });
-    }
+function render(){
 
-    function update(){
-      const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap'));
-      const maxIndex = Math.max(0, dataFiltrada.length - visible);
+  track.innerHTML = dataFiltrada.map(p => `
+    <div class="card">
+      <div class="days-tag">${p.tag}</div>
+      <div class="name">${p.nome}</div>
+      <div class="date">${String(p.dia).padStart(2,'0')}/${String(p.mes).padStart(2,'0')}</div>
+    </div>
+  `).join('');
 
-      if(index > maxIndex) index = maxIndex;
-      if(index < 0) index = 0;
+  visible = getVisible();
+  applyWidths();
+  update();
+}
 
-      const offset = index * (cardWidth + gap);
-      track.style.transform = `translateX(-${offset}px)`;
+function applyWidths(){
+  const total = document.querySelector('.viewport').clientWidth;
+  const gap = 14;
 
-      prevBtn.disabled = index === 0;
-      nextBtn.disabled = index >= maxIndex;
-    }
+  cardWidth = (total - (gap * (visible - 1))) / visible;
 
-    function next(){
-      const maxIndex = Math.max(0, dataFiltrada.length - visible);
-      index = Math.min(index + 1, maxIndex);
-      update();
-    }
+  document.querySelectorAll('.card').forEach(c=>{
+    c.style.width = cardWidth + 'px';
+  });
+}
 
-    function prev(){
-      index = Math.max(index - 1, 0);
-      update();
-    }
+function update(){
+  const gap = 14;
+  const offset = index * (cardWidth + gap);
+  track.style.transform = `translateX(-${offset}px)`;
+}
 
-    prevBtn.addEventListener('click', prev);
-    nextBtn.addEventListener('click', next);
+function next(){
+  index = Math.min(index+1, dataFiltrada.length-visible);
+  update();
+}
 
-    window.addEventListener('resize', () => {
-      visible = getVisible();
-      applyCardWidths();
-      update();
-    });
+function prev(){
+  index = Math.max(index-1,0);
+  update();
+}
 
-    fetch('aniversariantes-proximos-7-dias.json?t=' + new Date().getTime())
-      .then(res => {
-        if (!res.ok) throw new Error('Erro ao carregar JSON');
-        return res.json();
-      })
-      .then(processar)
-      .catch(() => {
-        track.innerHTML = '<div class="empty">Erro ao carregar JSON.</div>';
-      });
-  </script>
+window.addEventListener('resize',()=>{
+  visible = getVisible();
+  applyWidths();
+  update();
+});
+
+fetch('aniversariantes-proximos-7-dias.json?t=' + new Date().getTime())
+  .then(r=>r.json())
+  .then(processar);
+</script>
+
 </body>
 </html>
